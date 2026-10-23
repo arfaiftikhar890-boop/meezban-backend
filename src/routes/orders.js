@@ -29,6 +29,7 @@ const lines = z
     z.object({
       id: z.string().regex(/^[a-f0-9]{24}$/i, 'Invalid item'),
       qty: z.coerce.number().int().min(1).max(50),
+      notes: z.string().trim().max(150).optional().default(''),
     }),
   )
   .min(1, 'Your cart is empty')

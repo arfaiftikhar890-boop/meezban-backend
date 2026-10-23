@@ -24,7 +24,14 @@ export function computeTotals({ subtotal, discount, taxRate = 0, deliveryFee = 0
 // Loads current prices from the database. The client only sends { id, qty }.
 export async function buildLines(lines) {
   const merged = new Map()
-  for (const l of lines) merged.set(l.id, (merged.get(l.id) || 0) + l.qty)
+  const noteOf = new Map()
+  for (const l of lines) {
+    merged.set(l.id, (merged.get(l.id) || 0) + l.qty)
+    if (l.notes) {
+      const cur = noteOf.get(l.id)
+      noteOf.set(l.id, cur && !cur.includes(l.notes) ? `${cur}; ${l.notes}` : cur || l.notes)
+    }
+  }
 
   const docs = await MenuItem.find({ _id: { $in: [...merged.keys()] } }).select('-image')
   const byId = new Map(docs.map((d) => [String(d._id), d]))
@@ -36,7 +43,7 @@ export async function buildLines(lines) {
     if (!doc) throw new HttpError(400, 'An item in your order no longer exists. Please refresh the menu.')
     if (!doc.available) throw new HttpError(400, `${doc.name} is sold out.`)
     if (qty > 99) throw new HttpError(400, `Too many of ${doc.name}.`)
-    items.push({ item: doc._id, name: doc.name, price: doc.price, qty })
+    items.push({ item: doc._id, name: doc.name, price: doc.price, qty, notes: (noteOf.get(id) || '').slice(0, 150) })
     subtotal += doc.price * qty
   }
   return { items, subtotal }

@@ -7,6 +7,7 @@ const lineSchema = new mongoose.Schema(
     name: { type: String, required: true },
     price: { type: Number, required: true },
     qty: { type: Number, required: true, min: 1 },
+    notes: { type: String, default: '' }, // per-item instructions from the customer
   },
   { _id: false },
 )
