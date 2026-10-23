@@ -49,6 +49,7 @@ router.get(
     const item = await MenuItem.findById(req.params.id).select('image hasImage')
     if (!item?.hasImage || !item.image?.data) return res.status(404).end()
     res.set('Content-Type', item.image.contentType)
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin') // let the website (another domain) show this photo
     res.set('Cache-Control', 'public, max-age=31536000, immutable') // URL carries ?v=<version>
     res.send(item.image.data)
   }),
