@@ -24,6 +24,8 @@ export function createApp() {
 
   app.use(
     helmet({
+      // Menu photos are loaded by the website (another domain), so allow cross-origin image loads.
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
