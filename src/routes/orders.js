@@ -28,7 +28,7 @@ const lines = z
   .array(
     z.object({
       id: z.string().regex(/^[a-f0-9]{24}$/i, 'Invalid item'),
-      qty: z.coerce.number().int().min(1).max(50),
+      qty: z.coerce.number().int().min(1).max(500),
       notes: z.string().trim().max(150).optional().default(''),
     }),
   )
