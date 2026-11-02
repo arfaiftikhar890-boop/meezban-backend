@@ -11,6 +11,7 @@ const menuItemSchema = new mongoose.Schema(
     featured: { type: Boolean, default: false },
     sort: { type: Number, default: 0 },
     hasImage: { type: Boolean, default: false },
+    cost: { type: Number, default: 0, min: 0 },
     imageVersion: { type: Number, default: 0 },
     image: {
       data: Buffer,
