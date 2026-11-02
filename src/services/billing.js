@@ -42,7 +42,7 @@ export async function buildLines(lines) {
     const doc = byId.get(id)
     if (!doc) throw new HttpError(400, 'An item in your order no longer exists. Please refresh the menu.')
     if (!doc.available) throw new HttpError(400, `${doc.name} is sold out.`)
-    if (qty > 99) throw new HttpError(400, `Too many of ${doc.name}.`)
+    if (qty > 500) throw new HttpError(400, `Too many of ${doc.name}.`)
     items.push({ item: doc._id, name: doc.name, price: doc.price, qty, notes: (noteOf.get(id) || '').slice(0, 150) })
     subtotal += doc.price * qty
   }
